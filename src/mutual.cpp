@@ -18,7 +18,8 @@ void run_FAI_based_algo(int n);
 
 int main(int argc, char *argv[])
 {
-  if (argc != 3) {
+  if (argc != 3)
+  {
     std::cerr << "Error: Invalid number of arguments. Check that exactly 2 arguments were passed to the program and try again." << std::endl;
     exit(INVALID_NUMBER_OF_ARGS_ERROR);
   }
