@@ -1,6 +1,7 @@
 #pragma once
 
-class PetersonsLock {
+class PetersonsLock
+{
  private:
   bool flag[2];
   int turn;

@@ -1,6 +1,7 @@
 #include "PetersonsLock.h"
 
-void PetersonsLock::lock(int process_id) {
+void PetersonsLock::lock(int process_id)
+{
   this->flag[process_id] = true;
   int j = (process_id + 1) % 2;
   // Set `this->turn` to be the other process' identifier
@@ -8,7 +9,7 @@ void PetersonsLock::lock(int process_id) {
   while (flag[j] && turn == j);
 }
 
-void PetersonsLock::unlock(int process_id) {
+void PetersonsLock::unlock(int process_id)
+{
   this->flag[process_id] = false;
 }
-

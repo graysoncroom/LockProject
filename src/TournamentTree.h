@@ -42,7 +42,8 @@ struct Pow<0>
  * a tournament tree.
  */
 template <typename LockType>
-struct IdWrappedLock {
+struct IdWrappedLock
+{
    int id_;
    LockType lock_;
 };

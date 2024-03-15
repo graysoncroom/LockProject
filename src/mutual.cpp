@@ -20,7 +20,9 @@ int main(int argc, char *argv[])
 {
   if (argc != 3)
   {
-    std::cerr << "Error: Invalid number of arguments. Check that exactly 2 arguments were passed to the program and try again." << std::endl;
+    std::cerr << "Error: Invalid number of arguments. " 
+              << "Check that exactly 2 arguments were passed to the program and try again."
+              << std::endl;
     exit(INVALID_NUMBER_OF_ARGS_ERROR);
   }
 
@@ -28,7 +30,8 @@ int main(int argc, char *argv[])
 
   if (algo_type_argument < 0 || algo_type_argument > 9) 
   {
-    std::cerr << "Error: Invalid Algorithm Type Argument. Must be a single digit number." << std::endl;
+    std::cerr << "Error: Invalid Algorithm Type Argument. Must be a single digit number." 
+              << std::endl;
     exit(INVALID_ALGO_ARG_ERROR);
   }
 
@@ -59,14 +62,17 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-void run_TT_based_algo(int n) {
+void run_TT_based_algo(int n)
+{
   // TODO: Implement
 }
 
-void run_TAS_based_algo(int n) {
+void run_TAS_based_algo(int n)
+{
   // TODO: Implement
 }
 
-void run_FAI_based_algo(int n) {
+void run_FAI_based_algo(int n)
+{
   // TODO: Implement
 }
