@@ -58,3 +58,15 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+
+void run_TT_based_algo(int n) {
+  // TODO: Implement
+}
+
+void run_TAS_based_algo(int n) {
+  // TODO: Implement
+}
+
+void run_FAI_based_algo(int n) {
+  // TODO: Implement
+}
