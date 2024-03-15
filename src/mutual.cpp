@@ -3,6 +3,7 @@
 
 
 #include <cstddef>
+#include <array>
 
 /*
  * `Pow` is a template metafunction that performs the operation 2^N
@@ -65,7 +66,7 @@ class TournamentTree
   TournamentTree()
   {
   }
-}
+};
 
 
 int main(int argc, char *argv[])

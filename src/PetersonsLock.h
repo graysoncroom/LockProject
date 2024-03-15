@@ -9,4 +9,4 @@ class PetersonsLock {
   // This is how the algorithm knows which process is asking to lock / unlock
   void lock(int process_id);
   void unlock(int process_id);
-}
+};
