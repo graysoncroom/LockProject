@@ -27,9 +27,6 @@
  * of integral representation. A fix for this, if needed in the future,
  * would be to replace the type of value with a BigInteger.
  */
-template <typename T>
-struct Pow {};
-
 template <unsigned N>
 struct Pow
 { static const std::size_t value = 2 * Pow<N-1>::value; };
@@ -51,13 +48,6 @@ struct IdWrappedLock {
    LockType lock_;
 };
 
-template <typename LockType>
-struct TournamentTreeNode {
-  LockType lock;
-  TournamentTreeNode *left_child;
-  TournamentTreeNode *right_child;
-}
-
 /*
  * Our implementation of `TournamentTree` expects 2 template arguments,
  * namely, an integer `N` indicating how many threads will be in competition
@@ -74,9 +64,6 @@ class TournamentTree
  public:
   TournamentTree()
   {
-    for (std::size_t i = 0; i < wrapped_locks_.size() - N; ++i)
-    {
-    }
   }
 }
 
