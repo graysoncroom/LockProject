@@ -1,10 +1,12 @@
 #pragma once
 
+#include <atomic>
+
 class PetersonsLock
 {
  private:
-  bool flag[2];
-  int turn;
+   std::atomic<bool> flag[2];
+   std::atomic<int> turn;
 
  public:
   // A `process_id` should be either 0 or 1.
