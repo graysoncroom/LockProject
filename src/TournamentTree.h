@@ -59,8 +59,8 @@ class TournamentTree
 {
   std::array<IdWrappedLock<LockType>, Pow<N>::value - 1> wrapped_locks_;
  public:
-  TournamentTree()
-  {
-  }
+  TournamentTree();
+  void acquire(int id);
+  void release(int id);
 };
 
