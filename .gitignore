@@ -1,5 +1,4 @@
 bin/
 build/
 *.swp
-gvscode/
-/.vs
+.vscode/
