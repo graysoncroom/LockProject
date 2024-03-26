@@ -13,13 +13,6 @@
 #define INVALID_THREAD_ARG_ERROR 2
 #define INVALID_NUMBER_OF_ARGS_ERROR 3
 
-// Note that the `int` parameter
-// indicates, in each case, how many
-// threads the algorithm should use.
-// void run_TT_based_algo(int);
-// void run_TAS_based_algo(int);
-// void run_FAI_based_algo(int);
-
 template <typename LockType>
 void thread_work_simulation(int, LockType&, int&);
 
@@ -96,7 +89,7 @@ int main(int argc, char *argv[])
 }
 
 template <typename LockType>
-void thread_work_simulation(int id, LockType& lock, int& x) 
+void thread_work_simulation(__attribute__((unused)) int id, LockType& lock, int& x) 
 {
     for (int i = 0; i < 1000; i++) {
         lock.acquire();
@@ -141,116 +134,3 @@ void simulate_lock_work(int n, LockType& lock)
   std::cout << "Final value of x = " << x << std::endl;
   std::cout << "Expected value of x = " << n * 1000 << std::endl;
 }
-
-// void dummy_TT_thead_work(int id, TournamentTree<PetersonsLock>& tree, int& x) {
-//     // Simulate work
-//     for (int i = 0; i < 10000; i++) {
-//       tree.acquire(id);
-//       x = x + 1;
-//       tree.release(id);
-//     }
-// }
-
-// void dummy_TAS_thread_work(int id, TASLock& lock, int& x) {
-//     // Simulate critical region work
-//     for (int i = 0; i < 10000; i++) {
-//       lock.acquire();
-//       x = x + 1;
-//       lock.release();
-//     }
-// }
-
-// void dummy_FAI_thread_work(int id, FAILock& lock, int& x) {
-//     // Simulate critical region work
-//     for (int i = 0; i < 10000; i++) {
-//       lock.acquire();
-//       x = x + 1;
-//       lock.release();
-//     }
-// }
-
-// void run_TT_based_algo(int n)
-// {
-//   TournamentTree<PetersonsLock> tree(n); // Construct the TournamentTree object
-
-//   int x = 0; // Shared integer to be incremented in the critical section
-
-//   std::vector<std::thread> threads; // Vector to hold all threads
-
-//   // Create n threads running the dummy critical region
-//   for (int i = 0; i < n; ++i) {
-//     threads.emplace_back(thread_work_simulation<TournamentTree<PetersonsLock>>, i, std::ref(tree), std::ref(x));
-//     std::cout << "Thread " << i << " created." << std::endl;
-//   }
-
-//   // Join all threads to ensure they complete before moving on
-//   for (auto& thread : threads) {
-//     thread.join();
-//   }
-
-//   // Print out results or completion message
-//   std::cout << "All threads have completed their execution." << std::endl;
-//   std::cout << "Final value of x = " << x << std::endl;
-//   std::cout << "Expected value of x = " << n * 10000 << std::endl;
-
-//   std::cout << "End of TournamentTree based algorithm." << std::endl;
-// }
-
-// void run_TAS_based_algo(int n)
-// {
-//   TASLock lock;
-
-//   int x = 0; // Shared integer to be incremented in the critical section
-
-//   std::vector<std::thread> threads; // Vector to hold all threads
-
-//   std::cout << "Starting TASLock based algorithm with " << n << " threads." << std::endl;
-
-//   // Create n threads running the dummy critical region
-//   for (int i = 0; i < n; ++i) {
-//     threads.emplace_back(thread_work_simulation<TASLock>, i, std::ref(lock), std::ref(x));
-//     std::cout << "Thread " << i << " created." << std::endl;
-//   }
-
-//   // Join all threads to ensure they complete before moving on
-//   for (auto& thread : threads) {
-//     thread.join();
-//   }
-
-//   // Print out results or completion message
-//   std::cout << "All Test-And-Set threads have completed their execution." << std::endl;
-//   std::cout << "Final value of x = " << x << std::endl;
-//   std::cout << "Expected value of x = " << n * 10000 << std::endl;
-
-//   std::cout << "End of Test-And-Set based algorithm." << std::endl;
-// }
-
-// void run_FAI_based_algo(int n)
-// {
-//   FAILock lock;
-
-//   // Shared integer to be incremented in the critical section
-//   int x = 0;
-
-//   std::vector<std::thread> threads;
-
-//   std::cout << "Starting FAILock based algorithm with " << n << " threads." << std::endl;
-
-//   // Create n threads running the dummy critical region
-//   for (int i = 0; i < n; ++i) {
-//     threads.emplace_back(thread_work_simulation<FAILock>, i, std::ref(lock), std::ref(x));
-//     std::cout << "Thread " << i << " created." << std::endl;
-//   }
-
-//   // Join all threads to ensure they complete before moving on
-//   for (auto& thread : threads) {
-//     thread.join();
-//   }
-
-//   // Print out results or completion message
-//   std::cout << "All Fetch-And-Increment threads have completed their execution." << std::endl;
-//   std::cout << "Final value of x = " << x << std::endl;
-//   std::cout << "Expected value of x = " << n * 10000 << std::endl;
-
-//   std::cout << "End of Fetch-And-Increment based algorithm." << std::endl;
-// }
