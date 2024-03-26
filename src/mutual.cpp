@@ -1,6 +1,6 @@
 #include "PetersonsLock.h"
 #include "TournamentTree.h"
-#include "TestSet.h"
+#include "TestAndSet.h"
 
 #include <iostream> // std::cout, std::cerr, std::endl
 #include <string>   // std::stoi
