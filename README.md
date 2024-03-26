@@ -13,7 +13,7 @@ Our options:
 
 argv[1]: The algorithm type
 - 0 == Tournament Tree algorithm
-- 1 == Test and set
+- 1 == Test and Set
 - 2 == Fetch and Increment
 
 argv[2]: The n number of threads to utilize
@@ -21,5 +21,11 @@ argv[2]: The n number of threads to utilize
 
 ## Example Usage
 
-Example: we want to choose TAS Based with 10 threads
+Example: Tournament Tree Based with 9 threads
+./mutual 2 9
+
+Example: Test and Set Based with 10 threads
 ./mutual 1 10
+
+Example: Fetch and Increment with 13 threads
+./mutual 2 13

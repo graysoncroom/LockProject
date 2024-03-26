@@ -5,20 +5,12 @@
 
 class FAILock 
 {
-    std::atomic<int> token_;
-    std::atomic<int> turn_;
+  std::atomic<int> token_;
+  std::atomic<int> turn_;
  public:
-    FAILock() : token_(0), turn_(0) {}
+  FAILock();
 
-    void acquire() 
-    {
-        int myturn = std::atomic_fetch_add(&this->token_, 1);
-        while (this->turn_ != myturn);
-    }
-
-    void release() 
-    {
-        std::atomic_fetch_add(&this->turn_, 1);
-    }
+  void acquire();
+  void release();
 };
 

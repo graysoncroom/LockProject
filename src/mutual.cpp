@@ -13,6 +13,8 @@
 #define INVALID_THREAD_ARG_ERROR 2
 #define INVALID_NUMBER_OF_ARGS_ERROR 3
 
+#define NUM_ITERATIONS 1000
+
 template <typename LockType>
 void thread_work_simulation(int, LockType&, int&);
 
@@ -53,7 +55,6 @@ int main(int argc, char *argv[])
       std::cout << "Starting TournamentTree based algorithm with " << n << " threads." << std::endl;
       TournamentTree<PetersonsLock> tree_metalock(n);
       simulate_lock_work(n, tree_metalock);
-      // run_TAS_based_algo(n);
       std::cout << "End of TournamentTree based algorithm." << std::endl;
       break;
     }
@@ -63,7 +64,6 @@ int main(int argc, char *argv[])
       std::cout << "Starting Test-And-Set based algorithm with " << n << " threads." << std::endl;
       TASLock lock;
       simulate_lock_work(n, lock);
-      // run_TAS_based_algo(n);
       std::cout << "End of Test-And-Set based algorithm." << std::endl;
       break;
     }
@@ -73,7 +73,6 @@ int main(int argc, char *argv[])
       std::cout << "Starting Fetch-And-Increment based algorithm with " << n << " threads." << std::endl;
       FAILock lock;
       simulate_lock_work(n, lock);
-      // run_FAI_based_algo(n);
       std::cout << "End of Fetch-And-Increment based algorithm." << std::endl;
       break;
     }
@@ -91,12 +90,10 @@ int main(int argc, char *argv[])
 template <typename LockType>
 void thread_work_simulation(__attribute__((unused)) int id, LockType& lock, int& x) 
 {
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < NUM_ITERATIONS; i++) 
+    {
         lock.acquire();
-        // std::cout << "Thread " << id << " acquired lock." << std::endl;
         x = x + 1;
-        // std::cout << "x = " << x << std::endl;
-        // std::cout << "Thread " << id << " released lock." << std::endl;
         lock.release();
     }
 }
@@ -104,7 +101,8 @@ void thread_work_simulation(__attribute__((unused)) int id, LockType& lock, int&
 template <>
 void thread_work_simulation<TournamentTree<PetersonsLock>>(int id, TournamentTree<PetersonsLock>& tree, int& x) 
 {
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < NUM_ITERATIONS; i++) 
+    {
       tree.acquire(id);
       x = x + 1;
       tree.release(id);
@@ -119,18 +117,20 @@ void simulate_lock_work(int n, LockType& lock)
   std::vector<std::thread> threads; // Vector to hold all threads
 
   // Create n threads running the `x` incrementing code
-  for (int i = 0; i < n; ++i) {
+  for (int i = 0; i < n; ++i) 
+  {
     threads.emplace_back(thread_work_simulation<LockType>, i, std::ref(lock), std::ref(x));
     std::cout << "Thread " << i << " created." << std::endl;
   }
 
   // Join all threads
-  for (auto& thread : threads) {
+  for (auto& thread : threads) 
+  {
     thread.join();
   }
 
   // Print results
   std::cout << "All threads have completed their execution." << std::endl;
   std::cout << "Final value of x = " << x << std::endl;
-  std::cout << "Expected value of x = " << n * 1000 << std::endl;
+  std::cout << "Expected value of x = " << n * NUM_ITERATIONS << std::endl;
 }
