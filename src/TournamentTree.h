@@ -31,10 +31,9 @@ std::size_t calculateTotalNodes(int N) {
 template <typename LockType>
 class TournamentTree 
 {
- public:
   std::size_t total_nodes_;
   std::vector<LockType> locks_;
-
+ public:
   explicit TournamentTree(int N): total_nodes_(calculateTotalNodes(N)), locks_(total_nodes_) {}
 
   /*
@@ -42,8 +41,7 @@ class TournamentTree
    */
   void acquire(int id) 
   {
-    // int depth = std::ceil(std::log2(total_nodes_));
-    int nodeIndex = id + locks_.size(); // Calculate the starting leaf node index
+    int nodeIndex = id + locks_.size();
     while (nodeIndex > 0)
     {
       int parentIndex = (nodeIndex - 1) / 2;
@@ -60,7 +58,6 @@ class TournamentTree
     // To store the path from leaf to root
     std::vector<int> path;
 
-    // Calculate the starting leaf node index
     int nodeIndex = id + locks_.size();
     while (nodeIndex > 0)
     {
