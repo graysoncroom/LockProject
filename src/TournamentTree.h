@@ -1,69 +1,86 @@
 #pragma once
 
 #include <cstddef>
-#include <array>
+#include <vector>
+#include <iostream>
+#include <cmath>
 
 /*
- * `Pow` is a template metafunction that performs the operation 2^N
- * at compile time.
- *
- * Example Usage:
- * const int x = Pow<5>::value;
- *
- * The value of `x` will be 32 (i.e. 2^5)
- * and at run time no computation will be performed.
- *
- * This was necessary to implement in order to pass a template
- * argument to TournamentTree that indicates how many processes/threads
- * will be needing a leaf node in the tree.
- *
- * We also considered making it a constructor argument, but felt that
- * the induced overhead was unnecessary.
- *
- * Warning:
- * On most architectures, going above around N = 62 results in a
- * metafunction return value of 0. This has to do with the limitations
- * of integral representation. A fix for this, if needed in the future,
- * would be to replace the type of value with a BigInteger.
+ * `int N` - The number of threads
+ * Returns the total number of nodes in the tournament tree
  */
-template <unsigned N>
-struct Pow
-{ static const std::size_t value = 2 * Pow<N-1>::value; };
-
-template <>
-struct Pow<0>
-{ static const std::size_t value = 1; };
+std::size_t calculateTotalNodes(int N) {
+    if (N <= 1) {
+        return 1; // Base case: For N=1, the tree has only one node.
+    }
+    int height = std::ceil(std::log2(N)); // Calculate the height of the tree
+    return std::pow(2, height) - 1; // Total nodes in a binary tree = 2^(height+1) - 1
+}
 
 /*
- * `IdWrappedLock` is a simple container that consists of
- * a Lock of type `LockType` and an identifier of type `int`
- *
- * This wrapped-lock type is helpful when dealing with locks in
- * a tournament tree.
+ * `TournamentTree<LockType>` constructs a full binary tree of locks.
+
+ * It assumes that each thread is has a unique id from 0 to N-1, 
+ * where N is the argument to the `TournamentTree` constructor.
+ * 
+ * It also assumes that the given Lock has 2 methods - acquire and release - which both take in an id argument
+ * which can be either 0 or 1. This requirement must be met in order for `TournamentTree` to function properly.
+ * 
+ * `LockType` - The type of lock to be used in the tournament tree
  */
 template <typename LockType>
-struct IdWrappedLock
-{
-   int id_;
-   LockType lock_;
-};
-
-/*
- * Our implementation of `TournamentTree` expects 2 template arguments,
- * namely, an integer `N` indicating how many threads will be in competition
- * for resources, and a Lock implementation `LockType`.
- *
- * By passing in the type of lock, we generalize this Tournament Tree to work
- * for arbitrary locks. This means our PetersonLock, TASLock, and FAILock will
- * all be scalable to n-threads under this TournamentTree. Very handy.
- */
-template <int N, typename LockType>
 class TournamentTree 
 {
-  std::array<IdWrappedLock<LockType>, Pow<N>::value - 1> wrapped_locks_;
  public:
-  TournamentTree();
-  void acquire(int id);
-  void release(int id);
+  std::size_t total_nodes_;
+  std::vector<LockType> locks_;
+
+  explicit TournamentTree(int N): total_nodes_(calculateTotalNodes(N)), locks_(total_nodes_) {}
+
+  /*
+   * Acquire the lock for the given thread `id`
+   */
+  void acquire(int id) 
+  {
+    // int depth = std::ceil(std::log2(total_nodes_));
+    int nodeIndex = id + locks_.size(); // Calculate the starting leaf node index
+    while (nodeIndex > 0)
+    {
+      int parentIndex = (nodeIndex - 1) / 2;
+      bool isLeftChild = nodeIndex % 2 == 1;
+      this->locks_[parentIndex].acquire(isLeftChild ? 0 : 1);
+      nodeIndex = parentIndex;
+    }
+  }
+
+  /*
+   * Release the lock for the given thread `id`
+   */
+  void release(int id) {
+    // To store the path from leaf to root
+    std::vector<int> path;
+
+    // Calculate the starting leaf node index
+    int nodeIndex = id + locks_.size();
+    while (nodeIndex > 0)
+    {
+      path.push_back(nodeIndex);
+      nodeIndex = (nodeIndex - 1) / 2;
+    }
+    path.push_back(0); // Add the root node
+
+    // Release locks in reverse order
+    // Note: The `path` vector contains the path from leaf to root
+    // We need to release locks in reverse order from root (inclusive) 
+    // to leaf (exclusive). This is due to the fact that leaves do not actually
+    // a node of their own in the tree, rather, each leaf shares a lock with one
+    // of its neighbors.
+    for (auto it = path.rbegin(); it != path.rend() - 1; ++it)
+    {
+      bool isLeftChild = *(it+1) % 2 == 1;
+      this->locks_[*it].release(isLeftChild ? 0 : 1);
+    }
+  }
 };
+
 

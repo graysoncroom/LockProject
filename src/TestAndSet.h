@@ -2,13 +2,13 @@
 
 #include <atomic>
 
-class TAS
+class TASLock
 {
   // our shared lock var
   std::atomic<bool> lock_;
 
 public:
-  TAS(): lock_(false) {}
+  TASLock(): lock_(false) {}
 
   /*
    * Acquire requests the lock which spins

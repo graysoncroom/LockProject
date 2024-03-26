@@ -1,8 +1,8 @@
-CXX=g++                            # compiler
-CXXFLAGS=-std=c++11 -Wall -Wextra   # compiler flags
-LDFLAGS=-pthread                  # linker flags
+CXX=g++                                # compiler
+CXXFLAGS=-std=c++11 -Wall -Wextra -g   # compiler flags
+LDFLAGS=-pthread                       # linker flags
 
-SRC = mutual.cpp                  # source file
+SRC = mutual.cpp                       # source file
 
 # Directories
 SRCDIR := src
