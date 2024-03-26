@@ -9,18 +9,49 @@
 #include <thread>
 #include <vector>
 
+
 #define INVALID_ALGO_ARG_ERROR 1
 #define INVALID_THREAD_ARG_ERROR 2
 #define INVALID_NUMBER_OF_ARGS_ERROR 3
 
 #define NUM_ITERATIONS 1000
 
+
 template <typename LockType>
 void thread_work_simulation(int, LockType&, int&);
+
 
 template <typename LockType>
 void simulate_lock_work(int, LockType&);
 
+/*
+ * Main function
+ * 
+ * This function is the entry point of the program
+ * 
+ * @param argc: The number of arguments passed to the program
+ * @param argv: The arguments passed to the program
+ * 
+ * Usage:
+ * 
+ * ./bin/mutual <algorithm_type> <thread_count>
+ * 
+ * where
+ * 
+ * <algorithm_type>:
+ * 0: TournamentTree<PetersonsLock>
+ * 1: TestAndSet
+ * 2: FetchAndIncrement
+ * 
+ * <thread_count>:
+ * The number of threads to be used in the simulation
+ * 
+ * Example Usage:
+ * 
+ * This will run the TournamentTree based algorithm with 4 threads
+ * ./bin/mutual 0 4
+ * 
+ */
 int main(int argc, char *argv[])
 {
   // ========== Process Program Arguments and Verify Correctness ==========
@@ -96,6 +127,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+
 /*
  * Thread work simulation function
  * 
@@ -130,6 +162,7 @@ void thread_work_simulation<TournamentTree<PetersonsLock>>(int id, TournamentTre
       tree.release(id);
     }
 }
+
 
 /*
  * Function to simulate the work of acquiring and releasing a lock of type `LockType`
