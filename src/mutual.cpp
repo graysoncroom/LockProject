@@ -23,16 +23,22 @@ void simulate_lock_work(int, LockType&);
 
 int main(int argc, char *argv[])
 {
+  // ========== Process Program Arguments and Verify Correctness ==========
+
+  // Check that exactly 2 arguments were passed to the program
   if (argc != 3)
   {
     std::cerr << "Error: Invalid number of arguments. " 
               << "Check that exactly 2 arguments were passed to the program and try again."
               << std::endl;
+    std::cerr << "For more information and examples, see README.md" << std::endl;
     exit(INVALID_NUMBER_OF_ARGS_ERROR);
   }
 
+  // Convert the algorithm type argument to an integer
   int algo_type_argument = (int)argv[1][0] - (int)'0';
 
+  // Check that the algorithm type argument is a single digit number
   if (algo_type_argument < 0 || algo_type_argument > 9) 
   {
     std::cerr << "Error: Invalid Algorithm Type Argument. Must be a single digit number." 
@@ -40,14 +46,17 @@ int main(int argc, char *argv[])
     exit(INVALID_ALGO_ARG_ERROR);
   }
 
+  // Convert the thread count argument to an integer
   int n = std::stoi(argv[2]);
 
+  // Check that the thread count argument is a positive integer
   if (n <= 0) 
   {
     std::cerr << "Error: Invalid Thread Count Argument. Must be a positive integer." << std::endl;
     exit(INVALID_THREAD_ARG_ERROR);
   }
 
+  // ========== Execute the algorithm based on the first argument (algorithm type argument) ==========
   switch (algo_type_argument)
   {
     case 0:
@@ -87,6 +96,15 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+/*
+ * Thread work simulation function
+ * 
+ * This function is called by each thread to simulate the work of acquiring and releasing a lock around a critical region
+ * 
+ * @param id: The id of the thread
+ * @param lock: The lock to be used by the thread
+ * @param x: The shared integer to be incremented in the critical section
+*/
 template <typename LockType>
 void thread_work_simulation(__attribute__((unused)) int id, LockType& lock, int& x) 
 {
@@ -98,6 +116,10 @@ void thread_work_simulation(__attribute__((unused)) int id, LockType& lock, int&
     }
 }
 
+
+/*
+ * Specialization of thread_work_simulation for TournamentTree<PetersonsLock>
+ */
 template <>
 void thread_work_simulation<TournamentTree<PetersonsLock>>(int id, TournamentTree<PetersonsLock>& tree, int& x) 
 {
@@ -109,6 +131,12 @@ void thread_work_simulation<TournamentTree<PetersonsLock>>(int id, TournamentTre
     }
 }
 
+/*
+ * Function to simulate the work of acquiring and releasing a lock of type `LockType`
+ * 
+ * @param n: The number of threads
+ * @param lock: The lock to be used by the threads
+ */
 template <typename LockType>
 void simulate_lock_work(int n, LockType& lock) 
 {
