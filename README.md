@@ -22,10 +22,13 @@ argv[2]: The n number of threads to utilize
 ## Example Usage
 
 Example: Tournament Tree Based with 9 threads
+
 ./mutual 2 9
 
 Example: Test and Set Based with 10 threads
+
 ./mutual 1 10
 
 Example: Fetch and Increment with 13 threads
+
 ./mutual 2 13
